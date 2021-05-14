@@ -15,10 +15,15 @@ const PORT = proess.env.PORT || 3000;
 // Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static("public"));
 
 //  (DATA)
-
-const note;
+const noteList=[
+  {
+      "title":"Test Title",
+      "text":"Test text"
+  }
+];
 
 // Routes
 
@@ -34,8 +39,11 @@ app.get('/notes', (req, res) => res.sendFile(path.join(__dirname, 'notes.html'))
 
 
 // delete note from id 
-app.get('/api/notes/:id', (req, res) => {
+app.post('/notes', (req, res) => {
   const chosen = req.params.id;
+  const idDelete = req.body;
+
+  res.json();
 
   console.log(chosen);
 
@@ -52,18 +60,18 @@ app.get('/api/notes/:id', (req, res) => {
 });
 
 // Create New Characters - takes in JSON input
-app.post('/api/characters', (req, res) => {
+app.post('/notes', (req, res) => {
   // req.body hosts is equal to the JSON post sent from the user
   // This works because of our body parsing middleware
-  const newcharacter = req.body;
+  const newNote = req.body;
 
-  console.log(newcharacter);
+  console.log(newNote);
 
   // We then add the json the user sent to the character array
-  characters.push(newcharacter);
+  noteList.push(newNote);
 
   // We then display the JSON to the users
-  res.json(newcharacter);
+  res.json(newNote);
 });
 
 // Starts the server to begin listening
