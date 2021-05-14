@@ -10,7 +10,7 @@ const note = require('./db/db.json');
 // Sets up the Express App
 
 const app = express();
-const PORT = proess.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 // Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
@@ -28,10 +28,10 @@ const noteList=[
 // Routes
 
 // res.send("Welcome Page!")
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public/index.html')));
 
 // res.send("Notes Page!")
-app.get('/notes', (req, res) => res.sendFile(path.join(__dirname, 'notes.html')));
+app.get('/notes', (req, res) => res.sendFile(path.join(__dirname, 'public/notes.html')));
 
 
 // Displays all characters
