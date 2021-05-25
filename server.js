@@ -2,78 +2,90 @@
 
 const express = require('express');
 const path = require('path');
-
+const util = require('util');
 const fs = require('fs');
-const note = require('./db/db.json');
-
 
 // Sets up the Express App
-
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static("public"));
+
+//middleware
+app.use(express.static(path.join(__dirname,"./public")));
 
 //  (DATA)
-const noteList=[
-  {
-      "title":"Test Title",
-      "text":"Test text"
-  }
-];
+const readFile = util.promisify(fs.readFile);
+const writeFile = util.promisify(fs.writeFile);
+const dbFile = path.join(__dirname,'./db/db.json');
+let notes;
 
 // Routes
 
+
 // res.send("Welcome Page!")
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public/index.html')));
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, './public/index.html')));
 
 // res.send("Notes Page!")
-app.get('/notes', (req, res) => res.sendFile(path.join(__dirname, 'public/notes.html')));
+app.get('/notes', (req, res) => res.sendFile(path.join(__dirname, './public/notes.html')));
 
 
-// Displays all characters
-// app.get('/api/characters', (req, res) => res.json(characters));
+
+
+// Displays all notes
+// app.get('/api/notes', (req, res) => res.json(notes));
+app.get('/api/notes', (req, res) =>  {
+  readFile(dbFile, 'utf-8')
+     .then(data => {
+         console.log(data);
+        return res.json(JSON.parse(data));
+     })
+});
 
 
 // delete note from id 
-app.post('/notes', (req, res) => {
+app.delete('/api/notes', (req, res) => {
   const chosen = req.params.id;
-  const idDelete = req.body;
 
-  res.json();
+  readFile(dbFile, 'utf-8')
+     .then(data => {
+        notes = JSON.parse(data);
 
-  console.log(chosen);
-
-//  read file from db.json
-
-
-//   for (let i = 0; i < characters.length; i++) {
-//     if (chosen === characters[i].routeName) {
-//       return res.json(characters[i]);
-//     }
-//   }
-
-  return res.json(db_list);
+        notes.splice(chosen, 1);
+        writeFile(dbFile, JSON.stringify(notes))
+           .then (() =>{
+                console.log("deleted:"+chosen)
+           });
+    });
+    res.json(chosen);
 });
 
-// Create New Characters - takes in JSON input
-app.post('/notes', (req, res) => {
-  // req.body hosts is equal to the JSON post sent from the user
+// Create New Note- takes in JSON input
+app.post('/api/notes', (req, res) => {
+  // req.body hosts is equal to the JSON post sent from the note
   // This works because of our body parsing middleware
   const newNote = req.body;
 
-  console.log(newNote);
+  readFile(dbFile, 'utf-8')
+    .then(data => {
+            notes = JSON.parse(data);
 
-  // We then add the json the user sent to the character array
-  noteList.push(newNote);
+            notes.push(newNote);
 
-  // We then display the JSON to the users
+             writeFile(dbFile, JSON.stringify(notes))
+              .then(() =>{
+                    console.log("added:"+newNote.title)
+              });
+        });
   res.json(newNote);
 });
 
-// Starts the server to begin listening
 
+//wild route
+app.get('*', (req, res) => res.sendFile(path.join(__dirname, './public/index.html')));
+
+
+// Starts the server to begin listening
 app.listen(PORT, () => console.log(`App listening on PORT ${PORT}`));
