@@ -20,21 +20,23 @@ THEN that note appears in the right-hand column
 8. click on the Write icon in the navigation at the top of the page
 THEN I am presented with empty fields to enter a new note title and the note’s text in the right-hand column
 
+ ## Portfolio  
 
-## Details
+* Note Taker<br>
+<img src="./assets/images/page.gif" width="200" />
+  
+* Heroku : Click 
+<a href="https://note-taker-klhi3.herokuapp.com/">Note Taker</a>
+<br>
 
-Html Routes:
 
-* `GET /notes` to return the `notes.html` file.
 
-* `GET *` to return the `index.html` file.
+  
+<!-- ## links -->
 
-* `GET /api/notes` to read the `db.json` file and return all saved notes as JSON.
+  
+   
 
-* `POST /api/notes` to receive a new note to save on the request body, add it to the `db.json` file, and then return the new note to the client.
-
-* `DELETE /api/notes/:id` to receive a query parameter containing the id of a note to delete.
-
-## Portfolio
+:copyright:klhi3
 
 
