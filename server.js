@@ -58,12 +58,10 @@ app.post('/api/notes', (req, res) => {
   res.json(newNote);
 });
 
-
 // delete note from id 
 app.delete('/api/notes/:id', (req, res) => {
    const chosen = parseInt(req.params.id);
  
-   console.log("chosen:"+chosen);
    readFile(dbFile, 'utf-8')
       .then(data => {
          notes = JSON.parse(data);
