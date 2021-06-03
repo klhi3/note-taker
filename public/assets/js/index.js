@@ -80,10 +80,10 @@ const handleNoteDelete = (e) => {
   // prevents the click listener for the list from being called when the button inside of it is clicked
   e.stopPropagation();
 
-  console.log("e="+e.target);
-
   const note = e.target;
-  const noteId = JSON.parse(note.parentElement.getAttribute('data-note')).id;
+  // const noteId = JSON.parse(note.parentElement.getAttribute('data-note')).id;
+  const noteId = e.target.parentElement.id;
+
 
   console.log(noteId);
 
@@ -159,9 +159,14 @@ const renderNoteList = async (notes) => {
     noteListItems.push(createLi('No saved Notes', false));
   }
 
+  // add position
+  let num = 0;
   jsonNotes.forEach((note) => {
     const li = createLi(note.title);
     li.dataset.note = JSON.stringify(note);
+
+    // add position
+    li.id = num++;
 
     noteListItems.push(li);
   });
